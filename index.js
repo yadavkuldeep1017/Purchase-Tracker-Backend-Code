@@ -8,6 +8,7 @@ const queryDatabase = require('./src/db.connection.js');
 const corsOptions = require('./src/cors.js');
 const XLSX = require('xlsx');
 const signupRoute = require('./src/signup.js');
+const purchasesRoutes = require('./routes/purchases');
 
 const app = express();
 const port = process.env.PORT || 5000;
