@@ -24,7 +24,7 @@ module.exports = (queryDatabase) => ({
                                  WHERE pur.purchase_date BETWEEN ? AND ? AND p.type_id = ?`;
                         params = [startDate, endDate, typeId];
                     } else { // All products within date range
-                        query = `SELECT p.prod_name AS Product_Name, SUM(pur.quantity) AS total_quantity, SUM(pur.total_price) AS Amount
+                        query = `SELECT p.prod_name AS Product_Name, SUM(pur.quantity) AS Quantity, SUM(pur.total_price) AS Amount
                                  FROM purchase_details pur
                                  JOIN product_details p ON pur.prod_id = p.prod_id
                                  WHERE pur.purchase_date BETWEEN ? AND ?
@@ -49,7 +49,7 @@ module.exports = (queryDatabase) => ({
                                  WHERE MONTH(pur.purchase_date) = ? AND YEAR(pur.purchase_date) = ? AND p.type_id = ?`;
                         params = [parseInt(monthNum, 10), parseInt(year, 10), typeId];
                     } else {
-                        query = `SELECT p.prod_name AS Product_Name, SUM(pur.quantity) AS total_quantity, SUM(pur.total_price) AS Amount
+                        query = `SELECT p.prod_name AS Product_Name, SUM(pur.quantity) AS Quantity, SUM(pur.total_price) AS Amount
                                  FROM purchase_details pur
                                  JOIN product_details p ON pur.prod_id = p.prod_id
                                  WHERE MONTH(pur.purchase_date) = ? AND YEAR(pur.purchase_date) = ?
@@ -73,7 +73,7 @@ module.exports = (queryDatabase) => ({
                                  WHERE p.type_id = ?`;
                         params = [typeId];
                     } else {
-                        query = `SELECT p.prod_name AS Product_Name, SUM(pur.quantity) AS total_quantity, SUM(pur.total_price) AS Amount
+                        query = `SELECT p.prod_name AS Product_Name, SUM(pur.quantity) AS Quantity, SUM(pur.total_price) AS Amount
                                  FROM purchase_details pur
                                  JOIN product_details p ON pur.prod_id = p.prod_id
                                  GROUP BY p.prod_name`;
