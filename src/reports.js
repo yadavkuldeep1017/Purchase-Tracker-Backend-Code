@@ -6,6 +6,10 @@ module.exports = (queryDatabase) => ({
         let query = '';
         let params = [];
 
+        console.log('Start date:- ',startDate);
+        console.log('End date:- ',endDate);
+        console.log('Product Name:- ',productName);
+
         try {
             switch (reportType) {
                 case 'custom':
@@ -16,13 +20,6 @@ module.exports = (queryDatabase) => ({
                                  JOIN users u ON pur.username = u.username
                                  WHERE pur.purchase_date BETWEEN ? AND ? AND p.prod_name = ?`;
                         params = [startDate, endDate, productName];
-                    } else if (productScope === 'typeSpecific') {
-                        query = `SELECT u.username AS Username, pur.purchase_date AS Date,p.prod_name AS Product_Name, pur.quantity AS Quantity, pur.total_price AS Amount
-                                 FROM purchase_details pur
-                                 JOIN product_details p ON pur.prod_id = p.prod_id
-                                 JOIN users u ON pur.username = u.username
-                                 WHERE pur.purchase_date BETWEEN ? AND ? AND p.type_id = ?`;
-                        params = [startDate, endDate, typeId];
                     } else { // All products within date range
                         query = `SELECT p.prod_name AS Product_Name, SUM(pur.quantity) AS Quantity, SUM(pur.total_price) AS Amount
                                  FROM purchase_details pur
@@ -41,13 +38,6 @@ module.exports = (queryDatabase) => ({
                                  JOIN users u ON pur.username = u.username
                                  WHERE MONTH(pur.purchase_date) = ? AND YEAR(pur.purchase_date) = ? AND p.prod_name = ?`;
                         params = [parseInt(monthNum, 10), parseInt(year, 10), productName];
-                    } else if (productScope === 'typeSpecific') {
-                        query = `SELECT u.username AS Username, pur.purchase_date AS Date,p.prod_name AS Product_Name, pur.quantity AS Quantity, pur.total_price AS Amount
-                                 FROM purchase_details pur
-                                 JOIN product_details p ON pur.prod_id = p.prod_id
-                                 JOIN users u ON pur.username = u.username
-                                 WHERE MONTH(pur.purchase_date) = ? AND YEAR(pur.purchase_date) = ? AND p.type_id = ?`;
-                        params = [parseInt(monthNum, 10), parseInt(year, 10), typeId];
                     } else {
                         query = `SELECT p.prod_name AS Product_Name, SUM(pur.quantity) AS Quantity, SUM(pur.total_price) AS Amount
                                  FROM purchase_details pur
@@ -65,14 +55,7 @@ module.exports = (queryDatabase) => ({
                                  JOIN users u ON pur.username = u.username
                                  WHERE p.prod_name = ?`;
                         params = [productName];
-                    } else if (productScope === 'typeSpecific') {
-                        query = `SELECT u.username AS Username, pur.purchase_date AS Date,p.prod_name AS Product_Name, pur.quantity AS Quantity, pur.total_price AS Amount
-                                 FROM purchase_details pur
-                                 JOIN product_details p ON pur.prod_id = p.prod_id
-                                 JOIN users u ON pur.username = u.username
-                                 WHERE p.type_id = ?`;
-                        params = [typeId];
-                    } else {
+                    }else {
                         query = `SELECT p.prod_name AS Product_Name, SUM(pur.quantity) AS Quantity, SUM(pur.total_price) AS Amount
                                  FROM purchase_details pur
                                  JOIN product_details p ON pur.prod_id = p.prod_id
@@ -84,6 +67,8 @@ module.exports = (queryDatabase) => ({
             }
 
             const results = await queryDatabase(query, params);
+
+            console.log('Results:- ',results);
 
             if (download === 'excel') {
                 if (results && results.length > 0) {

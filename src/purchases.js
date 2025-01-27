@@ -23,8 +23,9 @@ module.exports = (queryDatabase) => ({
                 }
 
                 if (!date) {
-                    date = new Date().toISOString().split('T')[0];
+                    date = new Date().getDate();
                 }
+                console.log(date);
 
                 const productExists = await queryDatabase('SELECT 1 FROM product_details WHERE prod_id = ?', [prod_id]);
                 if (productExists.length === 0) {
