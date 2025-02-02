@@ -18,7 +18,7 @@ module.exports = (queryDatabase) => ({
             res.status(201).json({ message: 'Product added', productId: result.insertId });
         } catch (error) {
             console.error('Error adding product:', error);
-            res.status(500).json({ message: 'Error adding product' });
+            res.status(500).json({ message: 'Product Already Exist' });
         }
     },
     updateProduct: async (req, res) => {
